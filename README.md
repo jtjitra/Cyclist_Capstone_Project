@@ -7,4 +7,5 @@ The biker data was downloaded from an Amazon drive in .csv files. One .csv file 
 
 # Analysis 
 ![Number of Rides per Day of the Week](https://user-images.githubusercontent.com/100651280/157783400-43d07fa9-1fc7-4ec0-852a-df5c92b04d13.png)
+
 Here is the visuals I created using R. 
