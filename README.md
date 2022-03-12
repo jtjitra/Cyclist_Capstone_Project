@@ -20,9 +20,16 @@ This bar chart shows the average duration of rides per day of the week for each 
 
 ![Riders per Month (2021)](https://user-images.githubusercontent.com/100651280/157993046-ec3dfb7f-5259-4c3a-8c90-e32445141a77.png)
 
-This bar chart shows the total amount of riders per month of the year 2021 for each biker type.
+This bar chart shows the total amount of riders per month of the year 2021 for each biker type. This visualization shows the months labelled as numbers. We can see that casual riders ride more during month 7-8, which is the month of July-August.
 
 
 ![Usage of Different Ride Types](https://user-images.githubusercontent.com/100651280/157993363-364c73fa-5c60-49a9-8601-880396c311f4.png)
 
 This bar chart shows the usage of different ride types by number of rides for each biker type. This visualization helps us identify which type of bike each rider uses the most. Casual riders use docked bikes more than members. Meanwhile, members use classic and electric bikes more than casual riders. 
+
+# Recommendations
+In order to convert more casual riders to members, Cyclists should:
+* offer discounts on the weekends
+* offer discounts for longer bike rides
+* do a special promotion for the month of July-August
+* offer discounts for docked bikes 
