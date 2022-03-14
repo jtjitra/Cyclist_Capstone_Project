@@ -8,7 +8,7 @@ The biker data was downloaded from an Amazon drive in .csv files. One .csv file 
 # Analysis 
 Here are the visuals I created for data insights using R.
 
-![Number of Rides per Day of the Week](https://user-images.githubusercontent.com/100651280/157783400-43d07fa9-1fc7-4ec0-852a-df5c92b04d13.png)
+![Number of Rides per Day of the Week](https://user-images.githubusercontent.com/100651280/158104153-9dc6ebb0-97f4-4de4-811d-79dc8b80a1f6.png)
 
 This bar chart shows the number of rides per day of the week for each biker type: casual riders and member riders. From the graph, we can see that members go on the most bike rides during the weekdays. However, during the weekends, we can see that casual riders go on the most bike rides. 
 
@@ -18,18 +18,24 @@ This bar chart shows the number of rides per day of the week for each biker type
 This bar chart shows the average duration of rides per day of the week for each biker type. This visualization helps us see how long each biker type spends on their bike ride. We can see that casual riders go on longer bike rides than members on every day of the week.
 
 
-![Riders per Month (2021)](https://user-images.githubusercontent.com/100651280/158102549-d1a1fec4-c065-4b9d-b3c4-a375451841c1.png)
+![Riders per Month (2021)](https://user-images.githubusercontent.com/100651280/158104170-dec52ef7-2355-4eef-ba2e-0ab18c9be21a.png)
 
 This bar chart shows the total amount of riders per month of the year 2021 for each biker type. This visualization shows the months labelled as numbers. We can see that casual riders ride more during month 7-8, which is the month of July-August.
 
 
-![Usage of Different Ride Types](https://user-images.githubusercontent.com/100651280/157993363-364c73fa-5c60-49a9-8601-880396c311f4.png)
+![Usage of Different Ride Types](https://user-images.githubusercontent.com/100651280/158104183-3b4261d9-a037-4437-a5c1-eeef2512ed26.png)
 
 This bar chart shows the usage of different ride types by number of rides for each biker type. This visualization helps us identify which type of bike each rider uses the most. Casual riders use docked bikes more than members. Meanwhile, members use classic and electric bikes more than casual riders. 
 
 # Recommendations
+As seen from the bar charts, casual members tend to:
+* bike more on the weekends
+* go on longer bike rides
+* bike more on the month of July-August
+* bike more on docked bikes
+
 In order to convert more casual riders to members, Cyclists should:
-* offer discounts on the weekends
-* offer discounts for longer bike rides
-* do a special promotion for the month of July-August
-* offer discounts for docked bikes 
+* offer special promotions and/or discounts on the weekends
+* offer special promotions and/or discounts for longer bike rides
+* do special promotions for the month of July-August
+* offer special promotions and/or discounts for docked bikes 
