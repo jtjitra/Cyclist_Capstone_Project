@@ -1,0 +1,177 @@
+---
+title: "Cyclist_Capstone_Project"
+author: "Josephine"
+date: "2/18/2022"
+output: html_document
+---
+
+## Importing data and installing packages
+First I imported all the .csv files containing data about the bikers. Then I installed the necessary packages to clean, analyze, and visualize the data.
+
+```{r installing packages}
+install.packages("tidyverse")
+library("tidyverse")
+
+install.packages("janitor")
+library("janitor")
+
+install.packages("lubridate")
+library(lubridate)
+
+install.packages("ggplot2")
+library(ggplot2)
+
+library(scales)
+```
+
+## Wrangle data into a single file
+When trying to combine columns, I changed made sure the data type for the columns (start_station_id, end_station_id) were both "character" strings.
+```{r change data types for columns}
+jan_2021 <- mutate(jan_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+feb_2021 <- mutate(feb_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+march_2021 <- mutate(march_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+april_2021 <- mutate(april_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+may_2021 <- mutate(may_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+aug_2021 <- mutate(aug_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+sep_2021 <- mutate(sep_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+oct_2021 <- mutate(oct_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+nov_2021 <- mutate(nov_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+dec_2021 <- mutate(dec_2021,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+jan_2022 <- mutate(jan_2022,start_station_id = as.character(start_station_id), end_station_id = as.character(end_station_id))
+```
+
+### Combine into one data table
+I used the bind row() function to combine all the monthly data tables into one single data table.
+```{r combine into one data table}
+all_trips <- bind_rows(jan_2021, feb_2021, march_2021, april_2021, may_2021, 
+                       june_2021, july_2021, aug_2021, sep_2021, oct_2021,
+                       nov_2021, dec_2021, jan_2022)
+```
+
+## Cleaning the data
+Now it will be easier to clean the data! First thing I did was remove any data I didn't need. I removed all the geographical indications from column 9 to 12.
+```{r remove column 9 to 12}
+all_trips <- all_trips[ -c(9:12) ]
+```
+
+Then I assigned NA to empty cells and remove all the rows containing NAs.
+```{r removing rows containing nulls}
+all_trips[all_trips == '' ] <- NA
+all_trips <- na.omit(all_trips)
+```
+
+Now that the data set is lighter, we can start to calculate the ride length. Then we add it to the ride_length column.
+```{r calculate ride length in minutes}
+ride_minutes <- difftime(all_trips$ended_at,all_trips$started_at, units = "mins")
+all_trips <- mutate(all_trips,ride_length = ride_minutes)
+```
+
+Next we can get the day of the week the riders had their bike ride. Then we add it to the ride_day column.
+```{r day of the ride}
+day_ride <- wday(all_trips$started_at, TRUE)
+all_trips <- mutate(all_trips, ride_day = day_ride)
+```
+
+Next we get the month the riders had their bike ride. Then we add it to the month column.
+```{r month of the ride}
+month_ride <- month(all_trips$started_at)
+all_trips <- mutate(all_trips, ride_month = month_ride)
+```
+
+Finally we want to remove any rides that have a negative time amount and that are too short (less or equal to 1 minute). 
+```{r filter negative and short rides}
+all_trips <- filter(all_trips, ride_length >= 1)
+```
+
+## Conduct Descriptive Analysis
+In order to find the descriptive analysis, we will need to find the mean, median, maximum, and minimum of column ride_length. 
+```{r descriptive analysis on ride_length}
+mean(all_trips$ride_length) #straight average (total ride length / rides)
+median(all_trips$ride_length) #midpoint number in the ascending array of ride lengths
+max(all_trips$ride_length) #longest ride
+min(all_trips$ride_length) #shortest ride
+```
+
+After we have found the values, then we will compare the mean, median, maximum, and minimum of column ride_length of members and casual users.
+```{r compare members and casual users}
+aggregate(all_trips$ride_length ~ all_trips$member_casual, FUN = mean)
+aggregate(all_trips$ride_length ~ all_trips$member_casual, FUN = median)
+aggregate(all_trips$ride_length ~ all_trips$member_casual, FUN = max)
+aggregate(all_trips$ride_length ~ all_trips$member_casual, FUN = min)
+```
+
+Then we can see the average ride time by each day for members vs casual users.
+```{r average ride time by each day for members vs casual users}
+aggregate(all_trips$ride_length ~ all_trips$member_casual + all_trips$ride_day, FUN = mean)
+```
+
+Then we can analyze the riders data by type and weekday.
+```{r analyze ridership data by type and weekday}
+all_trips %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>%  #creates weekday field using wday()
+  group_by(member_casual, weekday) %>%  #groups by usertype and weekday
+  summarise(number_of_rides = n()							#calculates the number of rides and average duration 
+            ,average_duration = mean(ride_length)) %>% 		# calculates the average duration
+  arrange(member_casual, weekday)								# sorts
+```
+
+## Visualize the data
+Now we are going to visualize the data. The first thing we will visualize is the number of rides for each membership.
+```{r visualize the number of rides}
+all_trips %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()) %>% 
+  arrange(member_casual, weekday)  %>% 
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(x = "Weekday", y = "Number of Rides", title = "Number of Rides per Day of the Week", 
+       fill = "Membership")+
+  scale_y_continuous(breaks = c(0,100000,200000,300000,400000), labels = c("0","100k","200k","300k","400k"))
+```
+
+Next let's create a visualization for average duration of rides for each membership. Since ggplot() can't scale difftime, we will use as.numeric() on y-value. 
+```{r visualize average duration of rides}
+all_trips %>% 
+  mutate(weekday = wday(started_at, label = TRUE)) %>%  
+  group_by(member_casual, weekday) %>%  
+  summarise(average_duration = mean(ride_length)) %>% 		
+  arrange(member_casual, weekday) %>% 
+  ggplot(aes(x = weekday, y = as.numeric(average_duration), fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(x = "Weekday", y = "Minutes", title = "Average Duration of Rides per Day of the Week",
+       fill = "Membership")
+```
+
+Next let's visualize the number of rides per month for each membership.
+```{r visualize number of rides per month}
+all_trips %>% 
+  group_by(member_casual, ride_month) %>% 
+  summarize(number_of_rides = n()) %>% 
+  ggplot(aes(x = ride_month, y = number_of_rides, fill = member_casual))+
+  geom_col(position = "dodge")+
+  labs(x ="Month", y = "Total Number of Rides",title = "Riders per Month (2021)" , fill = "Membership")+
+  scale_x_continuous(breaks=c(1,2,3,4,5,6,7,8,9,10,11,12))+
+  scale_y_continuous(breaks = c(0,100000,200000,300000), labels = c("0","100k","200k","300k"))
+```
+
+Next let's visualize the number of rides per bike type for each membership.
+```{r number of rides per bike type}
+all_trips %>% 
+  group_by(member_casual, rideable_type) %>% 
+  summarize(number_of_rides = n()) %>% 
+  ggplot(aes(x = rideable_type, y = number_of_rides, fill = member_casual))+
+  geom_col(position = "dodge") +
+  labs(x = "Ride Type", y = "Number of Rides", title = "Usage of Different Ride Types", 
+       fill = "Membership")+
+  scale_y_continuous(breaks = c(0,500000,1000000,1500000,2000000), labels = c("0","500k","1M","1.5M","2M"))
+```
+
+##Export Summary File for Further Analysis
+We will export a .csv file with the aggregated data that can be used to further visualize the data in Excel, Tableau, or my presentation software if we choose to.
+```{r creating .csv file}
+counts <- aggregate(all_trips$ride_length ~ all_trips$member_casual + all_trips$ride_day, FUN = mean)
+write.csv(counts,"divvy_exercise.csv", row.names = FALSE)
+```
+
+This is the end of the project! Congratulations!
