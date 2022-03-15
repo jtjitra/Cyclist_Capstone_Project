@@ -20,7 +20,7 @@ This bar chart shows the average duration of rides per day of the week for each 
 
 ![Rides per Month (2021)](https://user-images.githubusercontent.com/100651280/158280457-6200417f-3680-4199-9cf8-d579451d6b5c.png)
 
-This bar chart shows the total amount of riders per month of the year 2021 for each biker type. This visualization shows the months labelled as numbers. We can see that casual riders ride more during month 7-8, which is the month of July-August.
+This bar chart shows the total amount of rides per month of the year 2021 for each biker type. This visualization shows the months labelled as numbers. We can see that casual riders ride more during month 7-8, which is the month of July-August.
 
 
 ![Usage of Different Ride Types](https://user-images.githubusercontent.com/100651280/158280353-a78268a4-2777-4409-b503-d10b2142cd7b.png)
